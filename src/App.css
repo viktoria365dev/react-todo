@@ -47,18 +47,30 @@ ul {
 
 li {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
+  gap: 10px;
   background: #f9f9f9;
   margin: 6px 0;
   padding: 8px;
   border-radius: 4px;
 }
 
-li button {
+.completed {
+  text-decoration: line-through;
+  color: gray;
+}
+
+.actions {
+  margin-left: auto;
+  display: flex;
+  gap: 6px;
+}
+
+.delete-btn {
   background-color: #dc3545;
 }
 
-li button:hover {
+.delete-btn:hover {
   background-color: #a71d2a;
 }

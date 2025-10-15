@@ -4,10 +4,12 @@ import "./App.css";
 function App() {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [editingText, setEditingText] = useState("");
 
   function addTask() {
     if (newTask.trim() === "") return;
-    setTasks([...tasks, newTask]);
+    setTasks([...tasks, { text: newTask, completed: false }]);
     setNewTask("");
   }
 
@@ -16,6 +18,38 @@ function App() {
       return i !== index;
     });
     setTasks(updatedTasks);
+  }
+
+  function toggleTask(index) {
+    const updatedTasks = tasks.map((task, i) => {
+      if (i === index) {
+        return { ...task, completed: !task.completed };
+      }
+      return task;
+    });
+    setTasks(updatedTasks);
+  }
+
+  function startEditing(index) {
+    setEditingIndex(index);
+    setEditingText(tasks[index].text);
+  }
+
+  function saveEdit(index) {
+    const updatedTasks = tasks.map((task, i) => {
+      if (i === index) {
+        return { ...task, text: editingText };
+      }
+      return task;
+    });
+    setTasks(updatedTasks);
+    setEditingIndex(null);
+    setEditingText("");
+  }
+
+  function cancelEdit() {
+    setEditingIndex(null);
+    setEditingText("");
   }
 
   return (
@@ -34,14 +68,40 @@ function App() {
         {tasks.map(function (task, index) {
           return (
             <li key={index}>
-              {task}
-              <button
-                onClick={function () {
-                  deleteTask(index);
-                }}
-              >
-                Delete
-              </button>
+              <input
+                type="checkbox"
+                checked={task.completed}
+                onChange={() => toggleTask(index)}
+              />
+
+              {editingIndex === index ? (
+                <>
+                  <input
+                    type="text"
+                    value={editingText}
+                    onChange={(e) => setEditingText(e.target.value)}
+                  />
+                  <div className="actions">
+                    <button onClick={() => saveEdit(index)}>Save</button>
+                    <button onClick={cancelEdit}>Cancel</button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <span className={task.completed ? "completed" : ""}>
+                    {task.text}
+                  </span>
+                  <div className="actions">
+                    <button
+                      className="delete-btn"
+                      onClick={() => deleteTask(index)}
+                    >
+                      Delete
+                    </button>
+                    <button onClick={() => startEditing(index)}>Edit</button>
+                  </div>
+                </>
+              )}
             </li>
           );
         })}
