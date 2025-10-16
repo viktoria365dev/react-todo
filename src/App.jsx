@@ -1,5 +1,7 @@
 import { useState } from "react";
 import "./App.css";
+import TaskInput from "./TaskInput";
+import TaskItem from "./TaskItem";
 
 function App() {
   const [tasks, setTasks] = useState([]);
@@ -14,20 +16,15 @@ function App() {
   }
 
   function deleteTask(index) {
-    const updatedTasks = tasks.filter(function (_, i) {
-      return i !== index;
-    });
-    setTasks(updatedTasks);
+    setTasks(tasks.filter((_, i) => i !== index));
   }
 
   function toggleTask(index) {
-    const updatedTasks = tasks.map((task, i) => {
-      if (i === index) {
-        return { ...task, completed: !task.completed };
-      }
-      return task;
-    });
-    setTasks(updatedTasks);
+    setTasks(
+      tasks.map((task, i) =>
+        i === index ? { ...task, completed: !task.completed } : task
+      )
+    );
   }
 
   function startEditing(index) {
@@ -36,13 +33,11 @@ function App() {
   }
 
   function saveEdit(index) {
-    const updatedTasks = tasks.map((task, i) => {
-      if (i === index) {
-        return { ...task, text: editingText };
-      }
-      return task;
-    });
-    setTasks(updatedTasks);
+    setTasks(
+      tasks.map((task, i) =>
+        i === index ? { ...task, text: editingText } : task
+      )
+    );
     setEditingIndex(null);
     setEditingText("");
   }
@@ -55,56 +50,24 @@ function App() {
   return (
     <div className="app-container">
       <h1>My To-Do List</h1>
-      <input
-        type="text"
-        value={newTask}
-        onChange={function (e) {
-          setNewTask(e.target.value);
-        }}
-      />
-      <button onClick={addTask}>Add</button>
+      <TaskInput newTask={newTask} setNewTask={setNewTask} addTask={addTask} />
       <p>You have {tasks.length} tasks</p>
       <ul>
-        {tasks.map(function (task, index) {
-          return (
-            <li key={index}>
-              <input
-                type="checkbox"
-                checked={task.completed}
-                onChange={() => toggleTask(index)}
-              />
-
-              {editingIndex === index ? (
-                <>
-                  <input
-                    type="text"
-                    value={editingText}
-                    onChange={(e) => setEditingText(e.target.value)}
-                  />
-                  <div className="actions">
-                    <button onClick={() => saveEdit(index)}>Save</button>
-                    <button onClick={cancelEdit}>Cancel</button>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <span className={task.completed ? "completed" : ""}>
-                    {task.text}
-                  </span>
-                  <div className="actions">
-                    <button
-                      className="delete-btn"
-                      onClick={() => deleteTask(index)}
-                    >
-                      Delete
-                    </button>
-                    <button onClick={() => startEditing(index)}>Edit</button>
-                  </div>
-                </>
-              )}
-            </li>
-          );
-        })}
+        {tasks.map((task, index) => (
+          <TaskItem
+            key={index}
+            task={task}
+            index={index}
+            editingIndex={editingIndex}
+            editingText={editingText}
+            setEditingText={setEditingText}
+            toggleTask={toggleTask}
+            deleteTask={deleteTask}
+            startEditing={startEditing}
+            saveEdit={saveEdit}
+            cancelEdit={cancelEdit}
+          />
+        ))}
       </ul>
     </div>
   );
