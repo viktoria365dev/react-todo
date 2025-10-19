@@ -11,7 +11,7 @@ function TaskItem({
   cancelEdit,
 }) {
   return (
-    <li>
+    <li key={index} className={`task ${task.priority}`}>
       <input
         type="checkbox"
         checked={task.completed}

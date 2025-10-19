@@ -16,6 +16,7 @@ function App() {
   const [newTask, setNewTask] = useState("");
   const [editingIndex, setEditingIndex] = useState(null);
   const [editingText, setEditingText] = useState("");
+  const [selectedPriority, setSelectedPriority] = useState("medium");
 
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
@@ -23,8 +24,12 @@ function App() {
 
   function addTask() {
     if (newTask.trim() === "") return;
-    setTasks([...tasks, { text: newTask, completed: false }]);
+    setTasks([
+      ...tasks,
+      { text: newTask, completed: false, priority: selectedPriority },
+    ]);
     setNewTask("");
+    setSelectedPriority("medium");
   }
 
   function deleteTask(index) {
@@ -62,7 +67,13 @@ function App() {
   return (
     <div className="app-container">
       <h1>My To-Do List</h1>
-      <TaskInput newTask={newTask} setNewTask={setNewTask} addTask={addTask} />
+      <TaskInput
+        newTask={newTask}
+        setNewTask={setNewTask}
+        addTask={addTask}
+        selectedPriority={selectedPriority}
+        setSelectedPriority={setSelectedPriority}
+      />
       <p>You have {tasks.length} tasks</p>
       <ul>
         {tasks.map((task, index) => (
