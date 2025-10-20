@@ -9,6 +9,8 @@ function TaskItem({
   startEditing,
   saveEdit,
   cancelEdit,
+  editingPriority,
+  setEditingPriority,
 }) {
   return (
     <li key={index} className={`task ${task.priority}`}>
@@ -25,6 +27,15 @@ function TaskItem({
             value={editingText}
             onChange={(e) => setEditingText(e.target.value)}
           />
+          <select
+            value={editingPriority}
+            onChange={(e) => setEditingPriority(e.target.value)}
+          >
+            <option value="high">🔴 High</option>
+            <option value="medium">🟡 Medium</option>
+            <option value="low">🟢 Low</option>
+          </select>
+
           <div className="actions">
             <button onClick={() => saveEdit(index)}>Save</button>
             <button onClick={cancelEdit}>Cancel</button>

@@ -16,9 +16,9 @@ function TaskInput({
         value={selectedPriority}
         onChange={(e) => setSelectedPriority(e.target.value)}
       >
-        <option value="high">High 🔴</option>
-        <option value="medium">Medium 🟡</option>
-        <option value="low">Low 🟢</option>
+        <option value="high">🔴 High</option>
+        <option value="medium">🟡 Medium</option>
+        <option value="low">🟢 Low</option>
       </select>
 
       <button onClick={addTask}>Add</button>

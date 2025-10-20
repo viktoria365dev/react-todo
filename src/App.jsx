@@ -17,6 +17,13 @@ function App() {
   const [editingIndex, setEditingIndex] = useState(null);
   const [editingText, setEditingText] = useState("");
   const [selectedPriority, setSelectedPriority] = useState("medium");
+  const [editingPriority, setEditingPriority] = useState("medium");
+
+  const priorityOrder = {
+    high: 0,
+    medium: 1,
+    low: 2,
+  };
 
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
@@ -47,22 +54,30 @@ function App() {
   function startEditing(index) {
     setEditingIndex(index);
     setEditingText(tasks[index].text);
+    setEditingPriority(tasks[index].priority);
   }
 
   function saveEdit(index) {
     setTasks(
       tasks.map((task, i) =>
-        i === index ? { ...task, text: editingText } : task
+        i === index
+          ? { ...task, text: editingText, priority: editingPriority }
+          : task
       )
     );
     setEditingIndex(null);
     setEditingText("");
+    setEditingPriority("medium");
   }
 
   function cancelEdit() {
     setEditingIndex(null);
     setEditingText("");
   }
+
+  const sortedTasks = [...tasks].sort((a, b) => {
+    return priorityOrder[a.priority] - priorityOrder[b.priority];
+  });
 
   return (
     <div className="app-container">
@@ -76,7 +91,7 @@ function App() {
       />
       <p>You have {tasks.length} tasks</p>
       <ul>
-        {tasks.map((task, index) => (
+        {sortedTasks.map((task, index) => (
           <TaskItem
             key={index}
             task={task}
@@ -89,6 +104,8 @@ function App() {
             startEditing={startEditing}
             saveEdit={saveEdit}
             cancelEdit={cancelEdit}
+            editingPriority={editingPriority}
+            setEditingPriority={setEditingPriority}
           />
         ))}
       </ul>
