@@ -29,38 +29,54 @@ function App() {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
 
+  useEffect(() => {
+    if (tasks.some((t) => t.justAdded)) {
+      const timer = setTimeout(() => {
+        setTasks((prev) => prev.map((t) => ({ ...t, justAdded: false })));
+      }, 600);
+      return () => clearTimeout(timer);
+    }
+  }, [tasks]);
+
   function addTask() {
     if (newTask.trim() === "") return;
     setTasks([
       ...tasks,
-      { text: newTask, completed: false, priority: selectedPriority },
+      {
+        id: Date.now(),
+        text: newTask,
+        completed: false,
+        priority: selectedPriority,
+        justAdded: true,
+      },
     ]);
     setNewTask("");
     setSelectedPriority("medium");
   }
 
-  function deleteTask(index) {
-    setTasks(tasks.filter((_, i) => i !== index));
+  function deleteTask(id) {
+    setTasks(tasks.filter((task) => task.id !== id));
   }
 
-  function toggleTask(index) {
+  function toggleTask(id) {
     setTasks(
-      tasks.map((task, i) =>
-        i === index ? { ...task, completed: !task.completed } : task
+      tasks.map((task) =>
+        task.id === id ? { ...task, completed: !task.completed } : task
       )
     );
   }
 
-  function startEditing(index) {
-    setEditingIndex(index);
-    setEditingText(tasks[index].text);
-    setEditingPriority(tasks[index].priority);
+  function startEditing(id) {
+    const task = tasks.find((t) => t.id === id);
+    setEditingIndex(id);
+    setEditingText(task.text);
+    setEditingPriority(task.priority);
   }
 
-  function saveEdit(index) {
+  function saveEdit(id) {
     setTasks(
-      tasks.map((task, i) =>
-        i === index
+      tasks.map((task) =>
+        task.id === id
           ? { ...task, text: editingText, priority: editingPriority }
           : task
       )
@@ -73,11 +89,16 @@ function App() {
   function cancelEdit() {
     setEditingIndex(null);
     setEditingText("");
+    setEditingPriority("medium");
   }
 
   const sortedTasks = [...tasks].sort((a, b) => {
     return priorityOrder[a.priority] - priorityOrder[b.priority];
   });
+
+  const completed = tasks.filter((t) => t.completed).length;
+  const total = tasks.length;
+  const progress = total > 0 ? (completed / total) * 100 : 0;
 
   return (
     <div className="app-container">
@@ -90,12 +111,18 @@ function App() {
         setSelectedPriority={setSelectedPriority}
       />
       <p>You have {tasks.length} tasks</p>
+      <div className="progress-container">
+        <div className="progress-bar" style={{ width: `${progress}%` }}></div>
+      </div>
+      <p>
+        {completed} of {total} tasks completed
+      </p>
+
       <ul>
-        {sortedTasks.map((task, index) => (
+        {sortedTasks.map((task) => (
           <TaskItem
-            key={index}
+            key={task.id}
             task={task}
-            index={index}
             editingIndex={editingIndex}
             editingText={editingText}
             setEditingText={setEditingText}

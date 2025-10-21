@@ -1,6 +1,5 @@
 function TaskItem({
   task,
-  index,
   editingIndex,
   editingText,
   setEditingText,
@@ -13,14 +12,14 @@ function TaskItem({
   setEditingPriority,
 }) {
   return (
-    <li key={index} className={`task ${task.priority}`}>
+    <li className={`task ${task.priority} ${task.justAdded ? "bounce" : ""}`}>
       <input
         type="checkbox"
         checked={task.completed}
-        onChange={() => toggleTask(index)}
+        onChange={() => toggleTask(task.id)}
       />
 
-      {editingIndex === index ? (
+      {editingIndex === task.id ? (
         <>
           <input
             type="text"
@@ -31,13 +30,12 @@ function TaskItem({
             value={editingPriority}
             onChange={(e) => setEditingPriority(e.target.value)}
           >
-            <option value="high">🔴 High</option>
-            <option value="medium">🟡 Medium</option>
-            <option value="low">🟢 Low</option>
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
           </select>
-
           <div className="actions">
-            <button onClick={() => saveEdit(index)}>Save</button>
+            <button onClick={() => saveEdit(task.id)}>Save</button>
             <button onClick={cancelEdit}>Cancel</button>
           </div>
         </>
@@ -45,10 +43,10 @@ function TaskItem({
         <>
           <span className={task.completed ? "completed" : ""}>{task.text}</span>
           <div className="actions">
-            <button className="delete-btn" onClick={() => deleteTask(index)}>
+            <button className="delete-btn" onClick={() => deleteTask(task.id)}>
               Delete
             </button>
-            <button onClick={() => startEditing(index)}>Edit</button>
+            <button onClick={() => startEditing(task.id)}>Edit</button>
           </div>
         </>
       )}
