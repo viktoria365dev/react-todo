@@ -112,8 +112,12 @@ function App() {
       />
       <p>You have {tasks.length} tasks</p>
       <div className="progress-container">
-        <div className="progress-bar" style={{ width: `${progress}%` }}></div>
+        <div
+          className={`progress-bar ${progress === 100 ? "full" : ""}`}
+          style={{ width: `${progress}%` }}
+        ></div>
       </div>
+      {progress === 100 && <p className="celebrate">🎉 All tasks complete!</p>}
       <p>
         {completed} of {total} tasks completed
       </p>
