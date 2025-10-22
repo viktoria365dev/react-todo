@@ -18,6 +18,8 @@ function App() {
   const [editingText, setEditingText] = useState("");
   const [selectedPriority, setSelectedPriority] = useState("medium");
   const [editingPriority, setEditingPriority] = useState("medium");
+  const [selectedCategory, setSelectedCategory] = useState("general");
+  const [editingCategory, setEditingCategory] = useState("general");
 
   const priorityOrder = {
     high: 0,
@@ -48,10 +50,12 @@ function App() {
         completed: false,
         priority: selectedPriority,
         justAdded: true,
+        category: selectedCategory,
       },
     ]);
     setNewTask("");
     setSelectedPriority("medium");
+    setSelectedCategory("general");
   }
 
   function deleteTask(id) {
@@ -71,19 +75,26 @@ function App() {
     setEditingIndex(id);
     setEditingText(task.text);
     setEditingPriority(task.priority);
+    setEditingCategory(task.category);
   }
 
   function saveEdit(id) {
     setTasks(
       tasks.map((task) =>
         task.id === id
-          ? { ...task, text: editingText, priority: editingPriority }
+          ? {
+              ...task,
+              text: editingText,
+              priority: editingPriority,
+              category: editingCategory,
+            }
           : task
       )
     );
     setEditingIndex(null);
     setEditingText("");
     setEditingPriority("medium");
+    setEditingCategory("general");
   }
 
   function cancelEdit() {
@@ -92,7 +103,14 @@ function App() {
     setEditingPriority("medium");
   }
 
+  const categoryOrder = { general: 0, work: 1, personal: 2, shopping: 3 };
+
   const sortedTasks = [...tasks].sort((a, b) => {
+    // Completed tasks always go last
+    if (a.completed !== b.completed) {
+      return a.completed ? 1 : -1;
+    }
+    // Then sort by priority only
     return priorityOrder[a.priority] - priorityOrder[b.priority];
   });
 
@@ -109,6 +127,8 @@ function App() {
         addTask={addTask}
         selectedPriority={selectedPriority}
         setSelectedPriority={setSelectedPriority}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
       />
       <p>You have {tasks.length} tasks</p>
       <div className="progress-container">
@@ -137,6 +157,8 @@ function App() {
             cancelEdit={cancelEdit}
             editingPriority={editingPriority}
             setEditingPriority={setEditingPriority}
+            editingCategory={editingCategory}
+            setEditingCategory={setEditingCategory}
           />
         ))}
       </ul>

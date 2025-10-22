@@ -10,38 +10,63 @@ function TaskItem({
   cancelEdit,
   editingPriority,
   setEditingPriority,
+  editingCategory,
+  setEditingCategory,
 }) {
-  return (
-    <li className={`task ${task.priority} ${task.justAdded ? "bounce" : ""}`}>
-      <input
-        type="checkbox"
-        checked={task.completed}
-        onChange={() => toggleTask(task.id)}
-      />
+  const isEditing = editingIndex === task.id;
 
-      {editingIndex === task.id ? (
-        <>
+  return (
+    <li
+      className={`task ${task.priority} ${task.justAdded ? "bounce" : ""} ${
+        task.completed ? "completed" : ""
+      }`}
+    >
+      {isEditing ? (
+        <div className="edit-mode">
           <input
             type="text"
             value={editingText}
             onChange={(e) => setEditingText(e.target.value)}
           />
+
           <select
             value={editingPriority}
             onChange={(e) => setEditingPriority(e.target.value)}
           >
-            <option value="high">High</option>
-            <option value="medium">Medium</option>
-            <option value="low">Low</option>
+            <option value="high">🔴 High</option>
+            <option value="medium">🟡 Medium</option>
+            <option value="low">🟢 Low</option>
           </select>
+
+          <select
+            value={editingCategory}
+            onChange={(e) => setEditingCategory(e.target.value)}
+          >
+            <option value="general">General</option>
+            <option value="work">Work</option>
+            <option value="personal">Personal</option>
+            <option value="shopping">Shopping</option>
+          </select>
+
           <div className="actions">
             <button onClick={() => saveEdit(task.id)}>Save</button>
             <button onClick={cancelEdit}>Cancel</button>
           </div>
-        </>
+        </div>
       ) : (
         <>
-          <span className={task.completed ? "completed" : ""}>{task.text}</span>
+          <div className="task-main">
+            <input
+              type="checkbox"
+              checked={task.completed}
+              onChange={() => toggleTask(task.id)}
+            />
+            <span>{task.text}</span>
+            <span className={`category-label ${task.category}`}>
+              {task.category}
+            </span>
+          </div>
+
           <div className="actions">
             <button className="delete-btn" onClick={() => deleteTask(task.id)}>
               Delete

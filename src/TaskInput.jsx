@@ -4,6 +4,8 @@ function TaskInput({
   addTask,
   selectedPriority,
   setSelectedPriority,
+  selectedCategory,
+  setSelectedCategory,
 }) {
   return (
     <div className="input-group">
@@ -19,6 +21,15 @@ function TaskInput({
         <option value="high">🔴 High</option>
         <option value="medium">🟡 Medium</option>
         <option value="low">🟢 Low</option>
+      </select>
+      <select
+        value={selectedCategory}
+        onChange={(e) => setSelectedCategory(e.target.value)}
+      >
+        <option value="general">General</option>
+        <option value="work">Work</option>
+        <option value="personal">Personal</option>
+        <option value="shopping">Shopping</option>
       </select>
 
       <button onClick={addTask}>Add</button>
