@@ -20,6 +20,7 @@ function App() {
   const [editingPriority, setEditingPriority] = useState("medium");
   const [selectedCategory, setSelectedCategory] = useState("general");
   const [editingCategory, setEditingCategory] = useState("general");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const priorityOrder = {
     high: 0,
@@ -141,26 +142,37 @@ function App() {
       <p>
         {completed} of {total} tasks completed
       </p>
+      <input
+        type="text"
+        placeholder="Search tasks..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="search-bar"
+      />
 
       <ul>
-        {sortedTasks.map((task) => (
-          <TaskItem
-            key={task.id}
-            task={task}
-            editingIndex={editingIndex}
-            editingText={editingText}
-            setEditingText={setEditingText}
-            toggleTask={toggleTask}
-            deleteTask={deleteTask}
-            startEditing={startEditing}
-            saveEdit={saveEdit}
-            cancelEdit={cancelEdit}
-            editingPriority={editingPriority}
-            setEditingPriority={setEditingPriority}
-            editingCategory={editingCategory}
-            setEditingCategory={setEditingCategory}
-          />
-        ))}
+        {sortedTasks
+          .filter((task) =>
+            task.text.toLowerCase().includes(searchTerm.toLowerCase())
+          )
+          .map((task) => (
+            <TaskItem
+              key={task.id}
+              task={task}
+              editingIndex={editingIndex}
+              editingText={editingText}
+              setEditingText={setEditingText}
+              toggleTask={toggleTask}
+              deleteTask={deleteTask}
+              startEditing={startEditing}
+              saveEdit={saveEdit}
+              cancelEdit={cancelEdit}
+              editingPriority={editingPriority}
+              setEditingPriority={setEditingPriority}
+              editingCategory={editingCategory}
+              setEditingCategory={setEditingCategory}
+            />
+          ))}
       </ul>
     </div>
   );
