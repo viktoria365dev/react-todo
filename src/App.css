@@ -74,6 +74,15 @@ button:hover {
   background-color: #a71d2a;
 }
 
+/* Style the last button (Cancel) differently */
+.edit-mode .actions button:last-child {
+  background-color: #6c757d; /* gray */
+}
+
+.edit-mode .actions button:last-child:hover {
+  background-color: #5a6268;
+}
+
 /* Task items */
 li {
   display: flex;
@@ -284,6 +293,26 @@ li {
   outline: none;
   border-color: #007bff;
   box-shadow: 0 0 3px rgba(0, 123, 255, 0.5);
+}
+
+/* Edit mode */
+.edit-mode {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.edit-mode input,
+.edit-mode select {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.edit-mode .actions {
+  margin-top: 8px;
+  display: flex;
+  gap: 6px;
 }
 
 /* Responsive */
