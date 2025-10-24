@@ -74,9 +74,19 @@ button:hover {
   background-color: #a71d2a;
 }
 
+.clear-btn {
+  display: block;
+  margin: 12px auto;
+  background-color: #6c757d;
+}
+
+.clear-btn:hover {
+  background-color: #5a6268;
+}
+
 /* Style the last button (Cancel) differently */
 .edit-mode .actions button:last-child {
-  background-color: #6c757d; /* gray */
+  background-color: #6c757d;
 }
 
 .edit-mode .actions button:last-child:hover {

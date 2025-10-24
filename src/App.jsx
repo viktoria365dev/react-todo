@@ -104,6 +104,10 @@ function App() {
     setEditingPriority("medium");
   }
 
+  function clearCompleted() {
+    setTasks(tasks.filter((task) => !task.completed));
+  }
+
   const categoryOrder = { general: 0, work: 1, personal: 2, shopping: 3 };
 
   const sortedTasks = [...tasks].sort((a, b) => {
@@ -174,6 +178,9 @@ function App() {
             />
           ))}
       </ul>
+      <button onClick={clearCompleted} className="clear-btn">
+        Clear Completed
+      </button>
     </div>
   );
 }

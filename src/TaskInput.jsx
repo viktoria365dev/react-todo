@@ -32,7 +32,7 @@ function TaskInput({
         <option value="shopping">Shopping</option>
       </select>
 
-      <button onClick={addTask}>Add</button>
+      <button onClick={addTask}>Add Task</button>
     </div>
   );
 }
